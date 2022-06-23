@@ -1,11 +1,13 @@
 package action
 
 import (
-	"gpkg/dfile"
 	"os"
+
+	"github.com/jmlisowski/gpkg/dfile"
 )
 
-func usage() {
+//Usage function tells the user how to use gpkg
+func Usage() {
 	println("Usage:")
 	println("  gpkg <command> [<args>]")
 	println("")
@@ -16,7 +18,8 @@ func usage() {
 	println("  run       Runs a package")
 }
 
-func init() {
+//Init function makes gpkg ready to use
+func Init() {
 	//make a directory at ~/.gpkg to store the packages
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -30,7 +33,8 @@ func init() {
 	println("gpkg is ready to use")
 }
 
-func install() {
+//Install function installs a package from github
+func Install() {
 	// make a variable for the user's home directory
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -39,5 +43,5 @@ func install() {
 
 	//download a file from the jmlisowski/gpkg repository
 	//and install it
-	dfile.DownloadFile("https://github.com/jmlisowski/gpkg/blob/main/packages/test_server.jar", "~/.gpkg/test_server.jar")
+	dfile.DownloadFile("https://github.com/jmlisowski/gpkg/blob/main/packages/test_server.tar", homeDir+"/.gpkg/test_server.tar")
 }
