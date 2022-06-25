@@ -58,3 +58,17 @@ func Install(pkg string) {
 		log.Fatal(err)
 	}
 }
+
+//remove function
+func Remove(pkg string) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+
+	rmerr := os.RemoveAll(homeDir + "/.gpkg/" + pkg + "/")
+
+	if rmerr != nil {
+		panic(rmerr)
+	}
+}
