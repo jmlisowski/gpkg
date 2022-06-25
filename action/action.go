@@ -1,7 +1,9 @@
 package action
 
 import (
+	"log"
 	"os"
+	"os/exec"
 
 	"github.com/jmlisowski/gpkg/dfile"
 )
@@ -34,7 +36,7 @@ func Init() {
 }
 
 //Install function installs a package from github
-func Install() {
+func Install(pkg string) {
 	// make a variable for the user's home directory
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -43,5 +45,16 @@ func Install() {
 
 	//download a file from the jmlisowski/gpkg repository
 	//and install it
-	dfile.DownloadFile("https://github.com/jmlisowski/gpkg/blob/main/packages/test_server.tar", homeDir+"/.gpkg/test_server.tar")
+	dfile.DownloadFile("https://raw.githubusercontent.com/jmlisowski/gpkg/packages/"+pkg+".tar", homeDir+"/.gpkg/"+pkg+".tar")
+	cmd := exec.Command("tar", "-xvf", homeDir+"/.gpkg/"+pkg+".tar", "-C", homeDir+"/.gpkg/")
+	cmderr := cmd.Run()
+	if cmderr != nil {
+		log.Fatal(err)
+	}
+
+	path := homeDir + "/.gpkg/" + pkg + ".tar"
+	rmerr := os.Remove(path)
+	if rmerr != nil {
+		log.Fatal(err)
+	}
 }
