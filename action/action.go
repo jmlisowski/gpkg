@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/jmlisowski/gpkg/dfile"
 )
@@ -70,5 +71,26 @@ func Remove(pkg string) {
 
 	if rmerr != nil {
 		panic(rmerr)
+	}
+}
+
+//Run a package
+func Run(pkg string) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", homeDir+"/.gpkg/"+pkg+"/run.bat")
+		cmderr := cmd.Run()
+		if cmderr != nil {
+			log.Fatal(err)
+		}
+	} else {
+		cmd := exec.Command("sh", homeDir+"/.gpkg/"+pkg+"/run")
+		err := cmd.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
