@@ -1,6 +1,7 @@
 package action
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -33,7 +34,7 @@ func Init() {
 			panic(err)
 		}
 	}
-	println("gpkg is ready to use")
+	println("gpkg is ready to use!")
 }
 
 //Install function installs a package from github
@@ -46,31 +47,37 @@ func Install(pkg string) {
 
 	//download a file from the jmlisowski/gpkg repository
 	//and install it
+	println("downloading the " + pkg + " package")
 	dfile.DownloadFile("https://raw.githubusercontent.com/jmlisowski/gpkg/packages/"+pkg+".tar", homeDir+"/.gpkg/"+pkg+".tar")
+	println("extracting")
 	cmd := exec.Command("tar", "-xvf", homeDir+"/.gpkg/"+pkg+".tar", "-C", homeDir+"/.gpkg/")
 	cmderr := cmd.Run()
 	if cmderr != nil {
 		log.Fatal(err)
 	}
-
+	println("cleaning up")
 	path := homeDir + "/.gpkg/" + pkg + ".tar"
 	rmerr := os.Remove(path)
 	if rmerr != nil {
 		log.Fatal(err)
+	} else {
+		println(pkg + " is successfully installed!")
 	}
 }
 
-//remove function
+//Remove function
 func Remove(pkg string) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
-
+	println("removing " + pkg)
 	rmerr := os.RemoveAll(homeDir + "/.gpkg/" + pkg + "/")
 
 	if rmerr != nil {
 		panic(rmerr)
+	} else {
+		println(pkg + " is now removed!")
 	}
 }
 
@@ -81,16 +88,17 @@ func Run(pkg string) {
 		panic(err)
 	}
 	if runtime.GOOS == "windows" {
-		cmd := exec.Command("cmd", homeDir+"/.gpkg/"+pkg+"/run.bat")
-		cmderr := cmd.Run()
-		if cmderr != nil {
-			log.Fatal(err)
-		}
+		panic("this isn't for windows!!!")
 	} else {
 		cmd := exec.Command("sh", homeDir+"/.gpkg/"+pkg+"/run")
 		err := cmd.Run()
 		if err != nil {
 			log.Fatal(err)
 		}
+		out, err := cmd.Output()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%s\n", out)
 	}
 }
