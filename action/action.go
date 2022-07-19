@@ -91,14 +91,11 @@ func Run(pkg string) {
 		panic("this isn't for windows!!!")
 	} else {
 		cmd := exec.Command("sh", homeDir+"/.gpkg/"+pkg+"/run")
-		err := cmd.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
 		out, err := cmd.Output()
+		fmt.Printf("%s\n", out)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("%s\n", out)
 	}
 }
+
