@@ -36,8 +36,6 @@ func main() {
 				println("must specify a package!")
 			} else if len(args) == 2 {
 				action.Run(args[1])
-			} else {
-				println("only run one package at once!")
 			}
 		}
 	}
